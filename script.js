@@ -1,3 +1,6 @@
+// Performance monitoring
+const startTime = performance.now();
+
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize all functions
@@ -11,6 +14,18 @@ document.addEventListener('DOMContentLoaded', function() {
     initTypingEffect();
     initCounterAnimations();
     initNavbarScroll();
+    
+    // Track DOM content loaded performance
+    const domLoadTime = performance.now() - startTime;
+    console.log(`DOM loaded in ${domLoadTime.toFixed(2)}ms`);
+    
+    // Send to analytics if available
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'timing_complete', {
+            name: 'dom_interactive',
+            value: Math.round(domLoadTime)
+        });
+    }
 });
 
 // Loading Screen
@@ -73,7 +88,7 @@ function initMobileNavigation() {
     });
 }
 
-// Smooth Scrolling
+// Optimized Smooth Scrolling with reduced motion support
 function initSmoothScrolling() {
     const links = document.querySelectorAll('a[href^="#"]');
     
@@ -93,9 +108,13 @@ function initSmoothScrolling() {
                 
                 if (targetSection) {
                     const offsetTop = targetSection.offsetTop - 70; // Account for fixed navbar
+                    
+                    // Check for reduced motion preference
+                    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                    
                     window.scrollTo({
                         top: offsetTop,
-                        behavior: 'smooth'
+                        behavior: prefersReducedMotion ? 'auto' : 'smooth'
                     });
                 }
             }
@@ -978,8 +997,26 @@ function initContactHandlers() {
     });
 }
 
-// Performance optimization
+// Performance optimization and tracking
 window.addEventListener('load', () => {
+    // Track page load performance
+    const loadTime = performance.now() - startTime;
+    console.log(`Page loaded in ${loadTime.toFixed(2)}ms`);
+    
+    // Send to analytics if available
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'timing_complete', {
+            name: 'load',
+            value: Math.round(loadTime)
+        });
+        
+        // Track user engagement
+        gtag('event', 'page_view', {
+            page_title: document.title,
+            page_location: window.location.href
+        });
+    }
+    
     // Initialize contact handlers
     initContactHandlers();
     
@@ -1000,6 +1037,20 @@ window.addEventListener('load', () => {
     });
     
     images.forEach(img => imageObserver.observe(img));
+    
+    // Track scroll depth
+    let maxScroll = 0;
+    window.addEventListener('scroll', () => {
+        const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+        if (scrollPercent > maxScroll) {
+            maxScroll = scrollPercent;
+            if (typeof gtag !== 'undefined' && maxScroll % 25 === 0) {
+                gtag('event', 'scroll_depth', {
+                    scroll_percentage: maxScroll
+                });
+            }
+        }
+    });
 });
 
 // Image loading optimization
