@@ -590,9 +590,14 @@ function initFormHandling() {
         
         // Phone validation (optional but if provided, validate format)
         const phoneField = this.querySelector('[name="phone"]');
-        if (phoneField && phoneField.value.trim() && !isValidPhone(phoneField.value.trim())) {
+        const countrySelect = this.querySelector('[name="countryCode"]');
+        const countryCode = countrySelect ? countrySelect.value : '+233';
+        
+        if (phoneField && phoneField.value.trim() && !isValidPhone(phoneField.value.trim(), countryCode)) {
             isValid = false;
-            showError(phoneField, 'Please enter a valid phone number (e.g., (123) 456-7890)');
+            const selectedOption = countrySelect ? countrySelect.options[countrySelect.selectedIndex] : null;
+            const placeholder = selectedOption ? selectedOption.getAttribute('data-placeholder') : '0257679050';
+            showError(phoneField, `Please enter a valid phone number (e.g., ${placeholder})`);
         }
         
         if (isValid) {
@@ -636,9 +641,9 @@ function initFormHandling() {
             
             // Special handling for phone field
             if (this.name === 'phone') {
-                // Only allow numbers, spaces, parentheses, hyphens, dots, and plus sign
+                // Only allow numbers for Ghanaian phone numbers
                 const value = this.value;
-                const cleanedValue = value.replace(/[^\d\s\(\)\-\+\.]/g, '');
+                const cleanedValue = value.replace(/[^\d]/g, '');
                 
                 if (value !== cleanedValue) {
                     this.value = cleanedValue;
@@ -666,6 +671,25 @@ function initFormHandling() {
             this.parentNode.classList.remove('focused');
         });
     });
+    
+    // Country selector change handler
+    const countrySelect = form.querySelector('[name="countryCode"]');
+    const phoneField = form.querySelector('[name="phone"]');
+    
+    if (countrySelect && phoneField) {
+        countrySelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const placeholder = selectedOption.getAttribute('data-placeholder');
+            const pattern = selectedOption.getAttribute('data-pattern');
+            
+            // Update phone field placeholder and pattern
+            phoneField.placeholder = placeholder;
+            phoneField.pattern = pattern;
+            
+            // Clear any existing errors
+            clearError(phoneField);
+        });
+    }
 }
 
 function validateField(field) {
@@ -715,47 +739,40 @@ function isValidEmail(email) {
     return emailRegex.test(email) && email.length <= 254;
 }
 
-function isValidPhone(phone) {
-    // Enhanced international phone validation
-    // Remove all non-numeric characters except +, (, ), -, ., and spaces
-    const cleanedPhone = phone.replace(/[^\d\s\(\)\-\+\.]/g, '');
+function isValidPhone(phone, countryCode = '+233') {
+    // Remove all non-numeric characters
+    const cleanedPhone = phone.replace(/[^\d]/g, '');
     
-    // Check if it contains only valid characters
+    // Check if it contains only numbers
     if (phone !== cleanedPhone) {
         return false;
     }
     
-    // Remove all formatting characters to get just numbers
-    const numbersOnly = cleanedPhone.replace(/[\s\(\)\-\+\.]/g, '');
-    
-    // Must have at least 10 digits and no more than 15
-    if (numbersOnly.length < 10 || numbersOnly.length > 15) {
-        return false;
+    // Country-specific validation
+    switch (countryCode) {
+        case '+233': // Ghana
+            return cleanedPhone.length === 10 && cleanedPhone.startsWith('0');
+        case '+234': // Nigeria
+            return cleanedPhone.length === 11 && (cleanedPhone.startsWith('0') || cleanedPhone.startsWith('234'));
+        case '+254': // Kenya
+            return cleanedPhone.length === 9 && cleanedPhone.startsWith('7');
+        case '+27': // South Africa
+            return cleanedPhone.length === 9 && (cleanedPhone.startsWith('0') || cleanedPhone.startsWith('27'));
+        case '+1': // USA/Canada
+            return cleanedPhone.length === 10;
+        case '+44': // UK
+            return cleanedPhone.length === 11 && cleanedPhone.startsWith('0');
+        case '+91': // India
+            return cleanedPhone.length === 10 && (cleanedPhone.startsWith('6') || cleanedPhone.startsWith('7') || cleanedPhone.startsWith('8') || cleanedPhone.startsWith('9'));
+        case '+86': // China
+            return cleanedPhone.length === 11 && cleanedPhone.startsWith('1');
+        case '+81': // Japan
+            return cleanedPhone.length === 10 && cleanedPhone.startsWith('0');
+        case '+49': // Germany
+            return cleanedPhone.length === 11 && (cleanedPhone.startsWith('0') || cleanedPhone.startsWith('49'));
+        default:
+            return cleanedPhone.length >= 10 && cleanedPhone.length <= 15;
     }
-    
-    // Must start with a digit or +
-    if (!/^[\+]?[1-9]/.test(numbersOnly)) {
-        return false;
-    }
-    
-    // Check for common country codes
-    const countryCodes = [
-        '+1', '+44', '+33', '+49', '+39', '+34', '+31', '+46', '+47', '+45',
-        '+358', '+351', '+32', '+41', '+43', '+420', '+48', '+36', '+30', '+90',
-        '+81', '+82', '+86', '+91', '+61', '+64', '+27', '+55', '+52', '+54'
-    ];
-    
-    // If it starts with +, check if it's a valid country code
-    if (phone.startsWith('+')) {
-        const hasValidCountryCode = countryCodes.some(code => 
-            phone.startsWith(code + ' ') || phone.startsWith(code + '(') || phone.startsWith(code + '-')
-        );
-        if (!hasValidCountryCode && numbersOnly.length < 12) {
-            return false;
-        }
-    }
-    
-    return true;
 }
 
 function showError(field, message) {
