@@ -557,12 +557,6 @@ function initFormHandling() {
     if (!form) return;
     
     form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Get form data
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData);
-        
         // Enhanced validation for all form fields - only on submit
         const requiredFields = ['name', 'email', 'service', 'message'];
         let isValid = true;
@@ -600,37 +594,25 @@ function initFormHandling() {
             showError(phoneField, `Please enter a valid phone number (e.g., ${placeholder})`);
         }
         
-        if (isValid) {
-            // Show loading state
-            const submitBtn = document.getElementById('submitBtn');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Sending...';
-            submitBtn.disabled = true;
-            
-            // Collect form data properly
-            const formData = {
-                name: this.querySelector('[name="name"]').value.trim(),
-                email: this.querySelector('[name="email"]').value.trim(),
-                phone: this.querySelector('[name="phone"]').value.trim(),
-                service: this.querySelector('[name="service"]').value,
-                message: this.querySelector('[name="message"]').value.trim()
-            };
-            
-            console.log('Form Data Collected:', formData);
-            
-            // Simulate form submission (replace with actual endpoint)
-            setTimeout(() => {
-                // Show success message
-                showSuccessMessage();
-                
-                // Reset form
-                this.reset();
-                
-                // Reset button
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-            }, 1500);
+        if (!isValid) {
+            e.preventDefault();
+            return false;
         }
+        
+        // Show loading state
+        const submitBtn = document.getElementById('submitBtn');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
+        
+        // Let the form submit naturally to FormSubmit
+        // The form will redirect to FormSubmit's success page
+        // We'll show our success message after a delay
+        setTimeout(() => {
+            showSuccessMessage();
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }, 2000);
     });
     
     // Real-time validation with enhanced phone handling
