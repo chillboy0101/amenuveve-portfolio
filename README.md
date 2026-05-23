@@ -32,17 +32,18 @@ The `.html` files stay in the project because this is still a static website, bu
 images/
   SAM-Rej COMPANY LIMITED LOGO.webp
   gallery/
-    building-*.jpg
-    site-*.jpg
-    gate-*.jpg
-    plan-*.jpg
-    proof-*.jpg
-    agriculture-*.jpg
+    building-*.webp
+    site-*.webp
+    gate-*.webp
+    plan-*.webp
+    proof-*.webp
+    agriculture-*.webp
+    selected plan/site JPEGs where JPG is smaller than WebP
     video-*.mp4
-    video-*-poster.jpg
+    video-*-poster.webp
 ```
 
-All files under `images/` are referenced by the live HTML/CSS/JS site. Unused old demo/stock images have been removed.
+All files under `images/` are referenced by the live HTML/CSS/JS site. The gallery photos use optimized WebP where it reduces size, and unused old demo/stock images have been removed.
 
 ## Contact Form
 

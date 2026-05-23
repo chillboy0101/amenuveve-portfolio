@@ -295,7 +295,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: url('images/gallery/site-14.jpg') center/cover;
+    background: url('images/gallery/site-14.webp') center/cover;
     opacity: 0.42;
 }
 
@@ -936,7 +936,7 @@ section {
     inset: 0;
     background:
         linear-gradient(90deg, rgba(15, 23, 42, 0.84), rgba(15, 23, 42, 0.34)),
-        url('images/gallery/building-09.jpg') center/cover;
+        url('images/gallery/building-09.webp') center/cover;
     transform: scale(1.02);
 }
 
@@ -1094,23 +1094,23 @@ section {
     inset: 0;
     background:
         linear-gradient(90deg, rgba(15, 23, 42, 0.86), rgba(15, 23, 42, 0.38)),
-        var(--page-hero-image, url('images/gallery/site-14.jpg')) center/cover;
+        var(--page-hero-image, url('images/gallery/site-14.webp')) center/cover;
 }
 
 .about-hero {
-    --page-hero-image: url('images/gallery/building-09.jpg');
+    --page-hero-image: url('images/gallery/building-09.webp');
 }
 
 .services-hero {
-    --page-hero-image: url('images/gallery/site-05.jpg');
+    --page-hero-image: url('images/gallery/site-05.webp');
 }
 
 .portfolio-hero {
-    --page-hero-image: url('images/gallery/building-07.jpg');
+    --page-hero-image: url('images/gallery/building-07.webp');
 }
 
 .contact-hero {
-    --page-hero-image: url('images/gallery/gate-07.jpg');
+    --page-hero-image: url('images/gallery/gate-07.webp');
 }
 
 .page-hero-content {
