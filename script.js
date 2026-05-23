@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initFormHandling();
     initParallaxEffects();
     initPortfolioLightbox();
-    initTypingEffect();
+    initGalleryFilters();
     initCounterAnimations();
     initNavbarScroll();
     
@@ -90,7 +90,7 @@ function initMobileNavigation() {
 
 // Optimized Smooth Scrolling with reduced motion support
 function initSmoothScrolling() {
-    const links = document.querySelectorAll('a[href^="#"]');
+    const links = document.querySelectorAll('a[href*="#"]');
     
     links.forEach(link => {
         // Skip social media links and other non-navigation links
@@ -99,14 +99,18 @@ function initSmoothScrolling() {
         }
         
         link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href');
+            const href = this.getAttribute('href');
+            if (!href || href === '#') return;
+
+            const targetUrl = new URL(href, window.location.href);
+            const isSamePage = targetUrl.pathname === window.location.pathname;
+            const targetId = targetUrl.hash;
             
-            // Only proceed if href is a valid selector (starts with # and has an ID)
-            if (targetId && targetId.startsWith('#') && targetId.length > 1) {
+            if (isSamePage && targetId && targetId.length > 1) {
                 const targetSection = document.querySelector(targetId);
                 
                 if (targetSection) {
+                    e.preventDefault();
                     const offsetTop = targetSection.offsetTop - 70; // Account for fixed navbar
                     
                     // Check for reduced motion preference
@@ -204,13 +208,14 @@ function initParallaxEffects() {
     });
 }
 
-// Portfolio Lightbox
+// Portfolio and Gallery Lightbox
 function initPortfolioLightbox() {
-    const portfolioItems = document.querySelectorAll('.portfolio-item');
+    const imageItems = document.querySelectorAll('.portfolio-item, .gallery-card');
     
-    portfolioItems.forEach(item => {
+    imageItems.forEach(item => {
         item.addEventListener('click', function() {
             const img = this.querySelector('img');
+            if (!img) return;
             const title = this.querySelector('h3').textContent;
             const description = this.querySelector('p').textContent;
             
@@ -233,20 +238,36 @@ function initPortfolioLightbox() {
             imgElement.src = imgSrc;
         });
     });
+
+    const videoItems = document.querySelectorAll('.video-card');
+    videoItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            if (e.target.closest('video')) return;
+            const source = this.querySelector('source');
+            if (!source) return;
+            const title = this.querySelector('h3').textContent;
+            const description = this.querySelector('p').textContent;
+            createLightbox(source.src, title, description, 'video');
+        });
+    });
 }
 
-function createLightbox(imgSrc, title, description) {
+function createLightbox(mediaSrc, title, description, mediaType = 'image') {
+    const mediaMarkup = mediaType === 'video'
+        ? `<video src="${mediaSrc}" class="lightbox-video" controls playsinline></video>`
+        : `
+                <div class="lightbox-loading">
+                    <div class="spinner"></div>
+                    <p>Loading image...</p>
+                </div>
+                <img src="${mediaSrc}" alt="${title}" class="lightbox-image" onload="this.previousElementSibling.style.display='none'; this.style.opacity='1';" onerror="this.previousElementSibling.innerHTML='<p>Image not available</p>';">`;
     const lightbox = document.createElement('div');
     lightbox.className = 'lightbox';
     lightbox.innerHTML = `
         <div class="lightbox-content">
             <span class="lightbox-close">&times;</span>
             <div class="lightbox-image-container">
-                <div class="lightbox-loading">
-                    <div class="spinner"></div>
-                    <p>Loading image...</p>
-                </div>
-                <img src="${imgSrc}" alt="${title}" class="lightbox-image" onload="this.previousElementSibling.style.display='none'; this.style.opacity='1';" onerror="this.previousElementSibling.innerHTML='<p>Image not available</p>';">
+                ${mediaMarkup}
             </div>
             <div class="lightbox-info">
                 <h3>${title}</h3>
@@ -310,7 +331,7 @@ function createLightbox(imgSrc, title, description) {
             width: 100%;
             height: auto;
             max-height: 60vh;
-            object-fit: cover;
+            object-fit: contain;
             transition: transform 0.3s ease;
             display: block !important;
             background: #f8f9fa;
@@ -321,6 +342,12 @@ function createLightbox(imgSrc, title, description) {
         }
         .lightbox-image:hover {
             transform: scale(1.05);
+        }
+        .lightbox-video {
+            width: 100%;
+            max-height: 65vh;
+            display: block;
+            background: #0f172a;
         }
         .lightbox-image-container {
             min-height: 300px;
@@ -447,6 +474,34 @@ function createLightbox(imgSrc, title, description) {
     });
 }
 
+// Gallery Filters
+function initGalleryFilters() {
+    const filters = document.querySelectorAll('.gallery-filter');
+    const cards = document.querySelectorAll('.gallery-card, .video-card');
+    const videoSection = document.querySelector('.video-gallery-section');
+
+    if (!filters.length || !cards.length) return;
+
+    filters.forEach(filter => {
+        filter.addEventListener('click', () => {
+            const selected = filter.dataset.filter;
+
+            filters.forEach(button => button.classList.remove('active'));
+            filter.classList.add('active');
+
+            cards.forEach(card => {
+                const category = card.dataset.category;
+                const isVisible = selected === 'all' || category === selected;
+                card.classList.toggle('is-hidden', !isVisible);
+            });
+
+            if (videoSection) {
+                videoSection.classList.toggle('is-hidden', selected !== 'all' && selected !== 'video');
+            }
+        });
+    });
+}
+
 // Typing Effect
 function initTypingEffect() {
     const heroTitle = document.querySelector('.hero-title');
@@ -556,13 +611,15 @@ function initFormHandling() {
     const form = document.getElementById('contactForm');
     if (!form) return;
     
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
         // Enhanced validation for all form fields - only on submit
         const requiredFields = ['name', 'email', 'service', 'message'];
         let isValid = true;
         
         // Clear any existing errors first
         this.querySelectorAll('.error-message').forEach(error => error.remove());
+        this.querySelectorAll('.form-submit-error').forEach(error => error.remove());
         
         // Validate required fields
         requiredFields.forEach(field => {
@@ -594,10 +651,7 @@ function initFormHandling() {
             showError(phoneField, `Please enter a valid phone number (e.g., ${placeholder})`);
         }
         
-        if (!isValid) {
-            e.preventDefault();
-            return false;
-        }
+        if (!isValid) return false;
         
         // Show loading state
         const submitBtn = document.getElementById('submitBtn');
@@ -605,14 +659,26 @@ function initFormHandling() {
         submitBtn.textContent = 'Sending...';
         submitBtn.disabled = true;
         
-        // Let the form submit naturally to FormSubmit
-        // The form will redirect to FormSubmit's success page
-        // We'll show our success message after a delay
-        setTimeout(() => {
+        try {
+            const response = await fetch(this.action, {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+                body: new FormData(this)
+            });
+
+            if (!response.ok) {
+                throw new Error('Message submission failed');
+            }
+
+            this.reset();
+            this.classList.add('is-submitted');
+            this.setAttribute('aria-hidden', 'true');
             showSuccessMessage();
+        } catch (error) {
+            showFormSubmitError(this, 'Message could not be sent. Please try again or call SAM-ReJ directly.');
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
-        }, 2000);
+        }
     });
     
     // Real-time validation with enhanced phone handling
@@ -782,6 +848,14 @@ function clearError(field) {
     field.style.borderColor = 'rgba(52, 152, 219, 0.2)';
 }
 
+function showFormSubmitError(form, message) {
+    form.querySelectorAll('.form-submit-error').forEach(error => error.remove());
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'form-submit-error';
+    errorDiv.textContent = message;
+    form.appendChild(errorDiv);
+}
+
 function showSuccessMessage() {
     const successDiv = document.createElement('div');
     successDiv.className = 'success-message';
@@ -827,7 +901,7 @@ function showSuccessMessage() {
                 margin-bottom: 20px;
                 line-height: 1.6;
                 animation: elegantFadeIn 0.8s ease-out 0.4s both;
-            ">Thank you for contacting Amenuveve. We'll get back to you within 24 hours.</p>
+            ">Thank you for contacting SAM-ReJ. We'll get back to you within 24 hours.</p>
             <button onclick="this.parentElement.parentElement.remove()" style="
                 background: linear-gradient(135deg, #1877f2, #0d6efd);
                 color: white;
@@ -953,44 +1027,12 @@ function initDropdownAnimations() {
 
 // Contact Information Click Handlers
 function initContactHandlers() {
-    // Phone click handler
-    const phoneElements = document.querySelectorAll('[onclick*="tel:"]');
-    phoneElements.forEach(element => {
-        element.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Add visual feedback
-            this.style.transform = 'scale(0.95)';
+    const contactElements = document.querySelectorAll('[onclick*="tel:"], [onclick*="mailto:"], [onclick*="maps.google.com"]');
+    contactElements.forEach(element => {
+        element.addEventListener('click', function() {
+            this.style.transform = 'scale(0.98)';
             setTimeout(() => {
                 this.style.transform = '';
-                window.open('tel:+15551234567');
-            }, 150);
-        });
-    });
-
-    // Email click handler
-    const emailElements = document.querySelectorAll('[onclick*="mailto:"]');
-    emailElements.forEach(element => {
-        element.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Add visual feedback
-            this.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                this.style.transform = '';
-                window.open('mailto:info@amenuveve.com?subject=Inquiry from Amenuveve Website&body=Hello, I would like to discuss a construction project with you.');
-            }, 150);
-        });
-    });
-
-    // Location click handler
-    const locationElements = document.querySelectorAll('[onclick*="maps.google.com"]');
-    locationElements.forEach(element => {
-        element.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Add visual feedback
-            this.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                this.style.transform = '';
-                window.open('https://maps.google.com/?q=123+Construction+Ave+Building+District');
             }, 150);
         });
     });
@@ -1098,4 +1140,4 @@ document.addEventListener('keydown', (e) => {
             }, 300);
         }
     }
-}); 
+});
