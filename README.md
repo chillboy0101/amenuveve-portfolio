@@ -13,6 +13,19 @@ The site uses local media only, so Vercel can redeploy without missing photos, v
 - `gallery.html` - full photo and video gallery
 - `contact.html` - contact details and inquiry form
 
+## Hosted URLs
+
+Vercel is configured with `cleanUrls` in `vercel.json`, so public links use clean paths:
+
+- `/`
+- `/about`
+- `/services`
+- `/portfolio`
+- `/gallery`
+- `/contact`
+
+The `.html` files stay in the project because this is still a static website, but visitors should not see `.html` in the hosted navigation.
+
 ## Media Organization
 
 ```
@@ -50,5 +63,5 @@ py -m http.server 4177 --bind 127.0.0.1
 Then open:
 
 ```text
-http://127.0.0.1:4177/index.html
+http://127.0.0.1:4177/
 ```
