@@ -9,18 +9,13 @@ document.addEventListener('DOMContentLoaded', function() {
     initScrollAnimations();
     initSmoothScrolling();
     initFormHandling();
-    initParallaxEffects();
     initPortfolioLightbox();
     initGalleryFilters();
     initCounterAnimations();
     initNavbarScroll();
     
-    // Track DOM content loaded performance
-    const domLoadTime = performance.now() - startTime;
-    console.log(`DOM loaded in ${domLoadTime.toFixed(2)}ms`);
-    
-    // Send to analytics if available
     if (typeof gtag !== 'undefined') {
+        const domLoadTime = performance.now() - startTime;
         gtag('event', 'timing_complete', {
             name: 'dom_interactive',
             value: Math.round(domLoadTime)
@@ -195,19 +190,6 @@ function initScrollAnimations() {
     });
 }
 
-// Parallax Effects
-function initParallaxEffects() {
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const parallaxElements = document.querySelectorAll('.hero-background, .glass-overlay');
-        
-        parallaxElements.forEach(element => {
-            const speed = 0.5;
-            element.style.transform = `translateY(${scrolled * speed}px)`;
-        });
-    });
-}
-
 // Portfolio and Gallery Lightbox
 function initPortfolioLightbox() {
     const imageItems = document.querySelectorAll('.portfolio-item, .gallery-card');
@@ -218,24 +200,7 @@ function initPortfolioLightbox() {
             if (!img) return;
             const title = this.querySelector('h3').textContent;
             const description = this.querySelector('p').textContent;
-            
-            // Ensure image is loaded before opening lightbox
-            const imgSrc = img.src;
-            const imgElement = new Image();
-            
-            imgElement.onload = function() {
-                console.log('Image loaded successfully:', imgSrc);
-                createLightbox(imgSrc, title, description);
-            };
-            
-            imgElement.onerror = function() {
-                console.log('Image failed to load:', imgSrc);
-                // Use a local fallback SVG if the original fails
-                createLightbox('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgdmlld0JveD0iMCAwIDgwMCA2MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiBmaWxsPSIjMzQ5OGRiIi8+Cjx0ZXh0IHg9IjQwMCIgeT0iMzAwIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzYiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+SW1hZ2UgTm90IEF2YWlsYWJsZTwvdGV4dD4KPC9zdmc+Cg==', title, description);
-            };
-            
-            // Start loading the image
-            imgElement.src = imgSrc;
+            createLightbox(img.currentSrc || img.src, title, description);
         });
     });
 
@@ -571,39 +536,23 @@ function initCounterAnimations() {
 // Navbar Scroll Effect
 function initNavbarScroll() {
     const navbar = document.querySelector('.navbar');
-    let lastScrollTop = 0;
-    
+    if (!navbar) return;
+
+    let ticking = false;
+
+    const updateNavbar = () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 10);
+        ticking = false;
+    };
+
+    updateNavbar();
+
     window.addEventListener('scroll', () => {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        // Add scrolled class when scrolling down
-        if (scrollTop > 10) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
+        if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(updateNavbar);
         }
-        
-        // Dynamic transparency based on scroll position
-        const maxScroll = 200;
-        const scrollProgress = Math.min(scrollTop / maxScroll, 1);
-        
-        // Update navbar background opacity dynamically
-        const baseOpacity = 0.05;
-        const scrolledOpacity = 0.15;
-        const currentOpacity = baseOpacity + (scrolledOpacity - baseOpacity) * scrollProgress;
-        
-        navbar.style.background = `rgba(255, 255, 255, ${currentOpacity})`;
-        
-        // Update blur effect
-        const baseBlur = 20;
-        const scrolledBlur = 30;
-        const currentBlur = baseBlur + (scrolledBlur - baseBlur) * scrollProgress;
-        
-        navbar.style.backdropFilter = `blur(${currentBlur}px)`;
-        navbar.style.webkitBackdropFilter = `blur(${currentBlur}px)`;
-        
-        lastScrollTop = scrollTop;
-    });
+    }, { passive: true });
 }
 
 // Form Handling
@@ -958,21 +907,6 @@ const styleSheet = document.createElement('style');
 styleSheet.textContent = additionalStyles;
 document.head.appendChild(styleSheet);
 
-// Service Worker for PWA capabilities (commented out until sw.js is created)
-/*
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-                console.log('SW registered: ', registration);
-            })
-            .catch(registrationError => {
-                console.log('SW registration failed: ', registrationError);
-            });
-    });
-}
-*/
-
 // Enhanced Dropdown Animations
 function initDropdownAnimations() {
     const selectElements = document.querySelectorAll('select');
@@ -1040,12 +974,8 @@ function initContactHandlers() {
 
 // Performance optimization and tracking
 window.addEventListener('load', () => {
-    // Track page load performance
-    const loadTime = performance.now() - startTime;
-    console.log(`Page loaded in ${loadTime.toFixed(2)}ms`);
-    
-    // Send to analytics if available
     if (typeof gtag !== 'undefined') {
+        const loadTime = performance.now() - startTime;
         gtag('event', 'timing_complete', {
             name: 'load',
             value: Math.round(loadTime)
@@ -1064,69 +994,49 @@ window.addEventListener('load', () => {
     // Initialize dropdown animations
     initDropdownAnimations();
     
-    // Lazy load images
     const images = document.querySelectorAll('img[data-src]');
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.classList.remove('lazy');
-                imageObserver.unobserve(img);
-            }
+    if (images.length && 'IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.classList.remove('lazy');
+                    imageObserver.unobserve(img);
+                }
+            });
         });
-    });
-    
-    images.forEach(img => imageObserver.observe(img));
-    
-    // Track scroll depth
-    let maxScroll = 0;
-    window.addEventListener('scroll', () => {
-        const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
-        if (scrollPercent > maxScroll) {
-            maxScroll = scrollPercent;
-            if (typeof gtag !== 'undefined' && maxScroll % 25 === 0) {
-                gtag('event', 'scroll_depth', {
-                    scroll_percentage: maxScroll
-                });
-            }
-        }
-    });
-});
 
-// Image loading optimization
-function initImageLoading() {
-    const images = document.querySelectorAll('img');
-    
-    images.forEach(img => {
-        // Add loading state
-        img.style.opacity = '0';
-        img.style.transition = 'opacity 0.3s ease';
-        
-        // Show image when loaded
-        img.addEventListener('load', function() {
-            this.style.opacity = '1';
-            this.classList.add('loaded');
-        });
-        
-        // Handle error with fallback
-        img.addEventListener('error', function() {
-            console.log('Image failed to load:', this.src);
-            // The onerror attribute in HTML will handle the fallback
-            this.style.opacity = '1'; // Show fallback image
-        });
-        
-        // If image is already cached, show it immediately
-        if (img.complete) {
-            img.style.opacity = '1';
-            img.classList.add('loaded');
-        }
-    });
-}
+        images.forEach(img => imageObserver.observe(img));
+    }
 
-// Initialize image loading
-document.addEventListener('DOMContentLoaded', function() {
-    initImageLoading();
+    if (typeof gtag !== 'undefined') {
+        let maxScroll = 0;
+        let scrollQueued = false;
+
+        window.addEventListener('scroll', () => {
+            if (scrollQueued) return;
+            scrollQueued = true;
+
+            requestAnimationFrame(() => {
+                const scrollableHeight = document.body.scrollHeight - window.innerHeight;
+                const scrollPercent = scrollableHeight > 0
+                    ? Math.round((window.scrollY / scrollableHeight) * 100)
+                    : 100;
+
+                if (scrollPercent > maxScroll) {
+                    maxScroll = scrollPercent;
+                    if (maxScroll % 25 === 0) {
+                        gtag('event', 'scroll_depth', {
+                            scroll_percentage: maxScroll
+                        });
+                    }
+                }
+
+                scrollQueued = false;
+            });
+        }, { passive: true });
+    }
 });
 
 // Keyboard navigation

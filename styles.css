@@ -2261,16 +2261,6 @@ section {
     transition: opacity 0.5s ease;
 }
 
-/* Image loading states */
-img {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-img.loaded {
-    opacity: 1;
-}
-
 /* Loading skeleton for images */
 .image-skeleton {
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
