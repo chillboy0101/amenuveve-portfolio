@@ -1523,6 +1523,29 @@ section {
     animation: homeCardGentlePulse 12s ease-in-out infinite;
 }
 
+.home-brand-card .profile-info h3 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.28);
+}
+
+.home-brand-card .profile-info p {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 76px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    color: #0f2c58;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    box-shadow: 0 10px 24px rgba(15, 44, 88, 0.2);
+    font-size: 1.05rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
 .home-brand-card .hero-ceo-photo-frame:hover {
     transform: scale(1.02);
     box-shadow: 0 12px 34px rgba(0, 0, 0, 0.24);
