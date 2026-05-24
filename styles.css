@@ -1502,10 +1502,95 @@ section {
     border-color: #0d6efd;
 }
 
-.home-brand-card .profile-img {
-    object-fit: contain;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 12px;
+.home-brand-card .hero-ceo-photo-frame {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.15);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.home-brand-card {
+    animation: homeCardGentlePulse 12s ease-in-out infinite;
+}
+
+.home-brand-card:hover {
+    animation: homeCardGentlePulse 12s ease-in-out infinite;
+}
+
+.home-brand-card .hero-ceo-photo-frame:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.24);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.home-brand-card .hero-ceo-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    animation: heroCeoPhotoPrimary 18s ease-in-out infinite;
+}
+
+.home-brand-card .hero-ceo-photo-primary {
+    animation-name: heroCeoPhotoPrimary;
+    object-position: center 26%;
+}
+
+.home-brand-card .hero-ceo-photo-secondary {
+    animation-name: heroCeoPhotoSecondary;
+    object-position: center 36%;
+}
+
+@keyframes heroCeoPhotoPrimary {
+    0%, 42% { opacity: 1; }
+    50%, 92% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes heroCeoPhotoSecondary {
+    0%, 42% { opacity: 0; }
+    50%, 92% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes homeCardGentlePulse {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+        box-shadow: 0 0 14px rgba(255, 255, 255, 0.2), 0 0 28px rgba(24, 119, 242, 0.14);
+        filter: brightness(1) contrast(1);
+    }
+
+    50% {
+        transform: translateY(-6px) scale(1.01);
+        box-shadow: 0 0 18px rgba(255, 255, 255, 0.26), 0 0 34px rgba(24, 119, 242, 0.18);
+        filter: brightness(1.02) contrast(1.01);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home-brand-card {
+        animation: none;
+    }
+
+    .home-brand-card .hero-ceo-photo {
+        animation: none;
+    }
+
+    .home-brand-card .hero-ceo-photo-primary {
+        opacity: 1;
+    }
+
+    .home-brand-card .hero-ceo-photo-secondary {
+        opacity: 0;
+    }
 }
 
 /* Contact Section */
