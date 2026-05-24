@@ -336,15 +336,15 @@ body {
 
 .hero-text {
     flex: 1;
-    max-width: 600px;
+    max-width: 690px;
 }
 
 .hero-title {
-    font-size: 4rem;
+    font-size: 4.35rem;
     font-weight: 700;
     color: white;
     margin-bottom: 20px;
-    line-height: 1.1;
+    line-height: 1.08;
 }
 
 .title-line {
@@ -362,17 +362,14 @@ body {
     0% {
         opacity: 0;
         transform: translateY(40px) scale(0.95);
-        filter: blur(10px);
     }
     50% {
         opacity: 0.7;
         transform: translateY(20px) scale(0.98);
-        filter: blur(5px);
     }
     100% {
         opacity: 1;
         transform: translateY(0) scale(1);
-        filter: blur(0);
     }
 }
 
@@ -388,12 +385,10 @@ body {
     0% {
         opacity: 0;
         transform: scale(0.9);
-        filter: blur(5px);
     }
     100% {
         opacity: 1;
         transform: scale(1);
-        filter: blur(0);
     }
 }
 
@@ -1518,7 +1513,8 @@ section {
     border: 4px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     background: rgba(255, 255, 255, 0.15);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    contain: layout paint;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .home-brand-card {
@@ -1599,6 +1595,15 @@ section {
 }
 
 @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+
     .home-brand-card {
         animation: none;
     }
@@ -1672,8 +1677,11 @@ section {
     text-align: center;
 }
 
+.contact-item h3,
 .contact-item h4 {
     color: #2c3e50;
+    font-size: 1rem;
+    font-weight: 700;
     margin-bottom: 5px;
 }
 
@@ -2285,6 +2293,14 @@ section {
     .nav-menu {
         gap: 15px;
     }
+
+    .hero-text {
+        max-width: 600px;
+    }
+
+    .hero-title {
+        font-size: 3.75rem;
+    }
 }
 
 @media (max-width: 900px) {
@@ -2298,6 +2314,11 @@ section {
 }
 
 @media (max-width: 768px) {
+    .nav-container {
+        padding: 0 12px;
+        gap: 10px;
+    }
+
     .hamburger {
         display: flex;
         position: relative;
@@ -2352,13 +2373,20 @@ section {
 
     .nav-logo h2,
     .nav-logo-title {
-        font-size: 1rem;
-        max-width: 180px;
+        display: block;
+        font-size: clamp(0.82rem, 2.4vw, 1rem);
+        max-width: min(180px, calc(100vw - 150px));
         overflow: visible;
         text-overflow: clip;
         line-height: 1.2;
         padding: 6px 8px;
         white-space: normal;
+    }
+
+    .nav-logo {
+        max-width: calc(100vw - 78px);
+        gap: 8px;
+        padding: 5px 8px;
     }
     
     .nav-logo-img {
@@ -2372,8 +2400,13 @@ section {
         gap: 40px;
     }
 
+    .hero-text {
+        width: 100%;
+        max-width: 100%;
+    }
+
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 2.65rem;
     }
 
     .hero-buttons {
@@ -2421,17 +2454,27 @@ section {
 }
 
 @media (max-width: 480px) {
-    .nav-logo h2 {
-        font-size: 0;
-        max-width: none;
-        overflow: visible;
-        text-overflow: clip;
-        line-height: 1.1;
-        padding: 6px 8px;
+    .nav-container {
+        padding: 0 8px;
+        gap: 8px;
     }
 
-    .nav-logo h2::after {
-        font-size: 0.9rem;
+    .nav-logo {
+        max-width: calc(100vw - 64px);
+        gap: 8px;
+        padding: 5px 8px;
+    }
+
+    .nav-logo h2,
+    .nav-logo-title {
+        display: block;
+        font-size: clamp(0.72rem, 3vw, 0.82rem);
+        max-width: min(150px, calc(100vw - 136px));
+        overflow: visible;
+        text-overflow: clip;
+        line-height: 1.15;
+        padding: 4px 6px;
+        white-space: normal;
     }
     
     .nav-logo-img {
@@ -2440,7 +2483,7 @@ section {
     }
     
     .hero-title {
-        font-size: 2rem;
+        font-size: 1.9rem;
     }
 
     .section-title {

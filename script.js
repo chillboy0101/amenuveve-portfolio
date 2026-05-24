@@ -1,18 +1,29 @@
 // Performance monitoring
 const startTime = performance.now();
+const runWhenIdle = (callback) => {
+    if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(callback, { timeout: 1200 });
+        return;
+    }
+
+    setTimeout(callback, 0);
+};
 
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize all functions
+    // Keep first paint responsive; defer heavier page enhancements.
     initLoadingScreen();
     initMobileNavigation();
-    initScrollAnimations();
     initSmoothScrolling();
     initFormHandling();
-    initPortfolioLightbox();
-    initGalleryFilters();
-    initCounterAnimations();
     initNavbarScroll();
+
+    runWhenIdle(() => {
+        initScrollAnimations();
+        initPortfolioLightbox();
+        initGalleryFilters();
+        initCounterAnimations();
+    });
     
     if (typeof gtag !== 'undefined') {
         const domLoadTime = performance.now() - startTime;
@@ -60,6 +71,8 @@ function initMobileNavigation() {
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
     const navLinks = document.querySelectorAll('.nav-link');
+
+    if (!hamburger || !navMenu) return;
 
     hamburger.addEventListener('click', () => {
         const isOpen = hamburger.classList.toggle('active');
@@ -126,6 +139,8 @@ function initSmoothScrolling() {
 
 // Enhanced Scroll Animations
 function initScrollAnimations() {
+    if (!('IntersectionObserver' in window)) return;
+
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -343,6 +358,8 @@ function initTypingEffect() {
 // Counter Animations
 function initCounterAnimations() {
     const stats = document.querySelectorAll('.stat-number');
+
+    if (!stats.length || !('IntersectionObserver' in window)) return;
     
     const counterObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
