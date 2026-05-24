@@ -1504,11 +1504,12 @@ section {
 
 .home-brand-card .hero-ceo-photo-frame {
     position: relative;
-    width: 200px;
-    height: 200px;
+    width: 220px;
+    height: 220px;
     margin: 0 auto 15px;
     border-radius: 50%;
     overflow: hidden;
+    isolation: isolate;
     border: 4px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     background: rgba(255, 255, 255, 0.15);
@@ -1559,12 +1560,15 @@ section {
     height: 100%;
     object-fit: cover;
     opacity: 0;
-    animation: heroCeoPhotoPrimary 18s ease-in-out infinite;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    will-change: opacity;
+    animation: heroCeoPhotoPrimary 18s linear infinite;
 }
 
 .home-brand-card .hero-ceo-photo-primary {
     animation-name: heroCeoPhotoPrimary;
-    object-position: center 26%;
+    object-position: center 18%;
 }
 
 .home-brand-card .hero-ceo-photo-secondary {
@@ -1573,14 +1577,14 @@ section {
 }
 
 @keyframes heroCeoPhotoPrimary {
-    0%, 42% { opacity: 1; }
-    50%, 92% { opacity: 0; }
+    0%, 38% { opacity: 1; }
+    50%, 88% { opacity: 0; }
     100% { opacity: 1; }
 }
 
 @keyframes heroCeoPhotoSecondary {
-    0%, 42% { opacity: 0; }
-    50%, 92% { opacity: 1; }
+    0%, 38% { opacity: 0; }
+    50%, 88% { opacity: 1; }
     100% { opacity: 0; }
 }
 
