@@ -124,7 +124,7 @@ body {
 }
 
 .nav-logo:focus-visible {
-    outline: 3px solid rgba(24, 119, 242, 0.55);
+    outline: 3px solid rgba(11, 94, 215, 0.65);
     outline-offset: 4px;
 }
 
@@ -149,7 +149,8 @@ body {
     background: rgba(255, 255, 255, 0.1);
 }
 
-.nav-logo h2 {
+.nav-logo h2,
+.nav-logo-title {
     color: #2c3e50;
     font-weight: 700;
     font-size: 1.6rem;
@@ -165,7 +166,8 @@ body {
     flex-shrink: 0;
 }
 
-.nav-logo h2:hover {
+.nav-logo h2:hover,
+.nav-logo-title:hover {
     background: rgba(255, 255, 255, 0.1);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
@@ -194,7 +196,7 @@ body {
 }
 
 .nav-link:hover {
-    color: #3498db;
+    color: #0b5ed7;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -202,8 +204,8 @@ body {
 }
 
 .nav-link.active {
-    color: #1877f2;
-    background: rgba(24, 119, 242, 0.1);
+    color: #0b5ed7;
+    background: rgba(11, 94, 215, 0.12);
 }
 
 .nav-link::after {
@@ -237,6 +239,7 @@ body {
     justify-content: center;
     min-width: 44px;
     min-height: 44px;
+    color: inherit;
 }
 
 .hamburger:hover {
@@ -292,8 +295,7 @@ body {
     align-items: center;
     position: relative;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    background-size: 400% 400%;
-    animation: morphingBackground 8s ease infinite;
+    background-size: cover;
     overflow: hidden;
 }
 
@@ -305,6 +307,7 @@ body {
     height: 100%;
     background: url('images/gallery/site-14.webp') center/cover;
     opacity: 0.42;
+    pointer-events: none;
 }
 
 .glass-overlay {
@@ -314,8 +317,9 @@ body {
     width: 100%;
     height: 100%;
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    pointer-events: none;
 }
 
 .hero-content {
@@ -431,14 +435,14 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #1877f2, #0d6efd);
+    background: linear-gradient(135deg, #0b5ed7, #064fb5);
     color: white;
-    box-shadow: 0 5px 15px rgba(24, 119, 242, 0.4);
+    box-shadow: 0 5px 15px rgba(11, 94, 215, 0.38);
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(24, 119, 242, 0.6);
+    box-shadow: 0 8px 25px rgba(11, 94, 215, 0.52);
 }
 
 .btn-secondary {
@@ -507,6 +511,7 @@ body {
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+.profile-info h2,
 .profile-info h3 {
     color: white;
     font-size: 1.5rem;
@@ -1517,13 +1522,14 @@ section {
 }
 
 .home-brand-card {
-    animation: homeCardGentlePulse 12s ease-in-out infinite;
+    animation: none;
 }
 
 .home-brand-card:hover {
-    animation: homeCardGentlePulse 12s ease-in-out infinite;
+    animation: none;
 }
 
+.home-brand-card .profile-info h2,
 .home-brand-card .profile-info h3 {
     font-size: 1.6rem;
     font-weight: 800;
@@ -1532,19 +1538,11 @@ section {
 }
 
 .home-brand-card .profile-info p {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 76px;
-    padding: 8px 18px;
-    border-radius: 999px;
-    color: #0f2c58;
-    background: rgba(255, 255, 255, 0.94);
-    border: 1px solid rgba(255, 255, 255, 0.72);
-    box-shadow: 0 10px 24px rgba(15, 44, 88, 0.2);
-    font-size: 1.05rem;
+    color: white;
+    font-size: 1.25rem;
     font-weight: 900;
-    line-height: 1;
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.28);
 }
 
 .home-brand-card .hero-ceo-photo-frame:hover {
@@ -1592,13 +1590,11 @@ section {
     0%, 100% {
         transform: translateY(0) scale(1);
         box-shadow: 0 0 14px rgba(255, 255, 255, 0.2), 0 0 28px rgba(24, 119, 242, 0.14);
-        filter: brightness(1) contrast(1);
     }
 
     50% {
         transform: translateY(-6px) scale(1.01);
         box-shadow: 0 0 18px rgba(255, 255, 255, 0.26), 0 0 34px rgba(24, 119, 242, 0.18);
-        filter: brightness(1.02) contrast(1.01);
     }
 }
 
@@ -2006,9 +2002,10 @@ section {
     color: #bdc3c7;
 }
 
+.footer h3,
 .footer h4 {
     margin-bottom: 20px;
-    color: #1877f2;
+    color: #63b3ff;
     font-weight: 600;
     font-size: 1.2rem;
 }
@@ -2028,10 +2025,11 @@ section {
 }
 
 .footer ul li a:hover {
-    color: #1877f2;
+    color: #93cfff;
 }
 
-.footer-contact p {
+.footer-contact p,
+.footer-contact-link {
     color: #e8f4fd;
     margin-bottom: 10px;
     display: flex;
@@ -2043,18 +2041,21 @@ section {
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.05);
+    text-decoration: none;
 }
 
-.footer-contact p:hover {
+.footer-contact p:hover,
+.footer-contact-link:hover {
     background: rgba(255, 255, 255, 0.08);
     transform: translateX(5px);
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-    color: #1877f2;
+    color: #93cfff;
 }
 
-.footer-contact p i {
+.footer-contact p i,
+.footer-contact-link i {
     margin-right: 10px;
-    color: #1877f2;
+    color: #63b3ff;
 }
 
 .footer-bottom {
@@ -2062,6 +2063,11 @@ section {
     padding-top: 20px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     color: #e8f4fd;
+}
+
+.developer-credit {
+    color: #93cfff;
+    font-weight: 600;
 }
 
 /* Optimized Animations - Using GPU acceleration */
@@ -2263,7 +2269,8 @@ section {
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-    .nav-logo h2 {
+    .nav-logo h2,
+    .nav-logo-title {
         font-size: 1.4rem;
         max-width: 180px;
         overflow: hidden;
@@ -2281,7 +2288,8 @@ section {
 }
 
 @media (max-width: 900px) {
-    .nav-logo h2 {
+    .nav-logo h2,
+    .nav-logo-title {
         font-size: 1.3rem;
         max-width: 200px;
         overflow: hidden;
@@ -2294,6 +2302,11 @@ section {
         display: flex;
         position: relative;
         z-index: 1002;
+    }
+
+    .hamburger:focus-visible {
+        outline: 3px solid rgba(11, 94, 215, 0.65);
+        outline-offset: 4px;
     }
 
     .nav-menu {
@@ -2324,7 +2337,7 @@ section {
     
     .hamburger.active span:nth-child(1) {
         transform: rotate(-45deg) translate(-2px, 6px);
-        background: #1877f2;
+        background: #0b5ed7;
     }
     
     .hamburger.active span:nth-child(2) {
@@ -2334,23 +2347,18 @@ section {
     
     .hamburger.active span:nth-child(3) {
         transform: rotate(45deg) translate(-2px, -6px);
-        background: #1877f2;
+        background: #0b5ed7;
     }
 
-    .nav-logo h2 {
-        font-size: 0;
-        max-width: none;
+    .nav-logo h2,
+    .nav-logo-title {
+        font-size: 1rem;
+        max-width: 180px;
         overflow: visible;
         text-overflow: clip;
         line-height: 1.2;
         padding: 6px 8px;
-    }
-
-    .nav-logo h2::after {
-        content: "SAM-ReJ Co. Ltd";
-        font-size: 1rem;
-        line-height: 1.2;
-        white-space: nowrap;
+        white-space: normal;
     }
     
     .nav-logo-img {

@@ -24,11 +24,11 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="/" class="nav-logo" aria-label="SAM-ReJ COMPANY LIMITED homepage">
-                <img src="images/SAM-Rej COMPANY LIMITED LOGO.webp" alt="SAM-ReJ COMPANY LIMITED Logo" class="nav-logo-img">
-                <h2>SAM-ReJ COMPANY LIMITED</h2>
+            <a href="/" class="nav-logo">
+                <img src="images/SAM-Rej COMPANY LIMITED LOGO.webp" alt="" aria-hidden="true" class="nav-logo-img">
+                <span class="nav-logo-title">SAM-ReJ COMPANY LIMITED</span>
             </a>
-            <ul class="nav-menu">
+            <ul class="nav-menu" id="primary-navigation">
                 <li><a href="/" class="nav-link active">Home</a></li>
                 <li><a href="/about" class="nav-link">About</a></li>
                 <li><a href="/services" class="nav-link">Services</a></li>
@@ -36,11 +36,11 @@
                 <li><a href="/gallery" class="nav-link">Gallery</a></li>
                 <li><a href="/contact" class="nav-link">Contact</a></li>
             </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+            <button class="hamburger" type="button" aria-label="Open navigation menu" aria-controls="primary-navigation" aria-expanded="false">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </button>
         </div>
     </nav>
 
@@ -67,13 +67,13 @@
                         <img src="images/amenuveve-ocloo-ceo-alt.jpeg" alt="" aria-hidden="true" class="hero-ceo-photo hero-ceo-photo-secondary">
                     </div>
                     <div class="profile-info">
-                        <h3>AMENUVEVE OCLOO</h3>
+                        <h2>AMENUVEVE OCLOO</h2>
                         <p>CEO</p>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="scroll-indicator">
+        <div class="scroll-indicator" aria-hidden="true">
             <div class="scroll-arrow"></div>
         </div>
     </section>
@@ -87,22 +87,22 @@
                 </div>
                 <div class="home-link-grid">
                     <a href="/about" class="home-link-card">
-                        <span class="home-link-icon"><i class="fas fa-id-card"></i></span>
+                        <span class="home-link-icon" aria-hidden="true"><i class="fas fa-id-card"></i></span>
                         <h3>About</h3>
                         <p>Learn about the company background, work approach and field experience behind SAM-ReJ.</p>
                     </a>
                     <a href="/services" class="home-link-card">
-                        <span class="home-link-icon"><i class="fas fa-screwdriver-wrench"></i></span>
+                        <span class="home-link-icon" aria-hidden="true"><i class="fas fa-screwdriver-wrench"></i></span>
                         <h3>Services</h3>
                         <p>See available construction, engineering, electrical, plumbing, haulage and agriculture support.</p>
                     </a>
                     <a href="/portfolio" class="home-link-card">
-                        <span class="home-link-icon"><i class="fas fa-building"></i></span>
+                        <span class="home-link-icon" aria-hidden="true"><i class="fas fa-building"></i></span>
                         <h3>Portfolio</h3>
                         <p>View selected project work including blockwork, site preparation, gates and finishes.</p>
                     </a>
                     <a href="/gallery" class="home-link-card">
-                        <span class="home-link-icon"><i class="fas fa-images"></i></span>
+                        <span class="home-link-icon" aria-hidden="true"><i class="fas fa-images"></i></span>
                         <h3>Gallery</h3>
                         <p>Browse real project photos, plans and videos grouped by the type of work shown.</p>
                     </a>
@@ -120,7 +120,7 @@
                         <span class="proof-eyebrow">Project proof</span>
                         <h2>Real Work You Can Review</h2>
                         <p>See actual blockwork, project plans and field videos before contacting SAM-ReJ.</p>
-                        <div class="proof-tags" aria-label="Available proof types">
+                        <div class="proof-tags">
                             <span>Project photos</span>
                             <span>Plans</span>
                             <span>Field videos</span>
@@ -139,7 +139,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-links">
-                    <h4>Quick Links</h4>
+                    <h3>Quick Links</h3>
                     <ul>
                         <li><a href="/">Home</a></li>
                         <li><a href="/about">About</a></li>
@@ -150,7 +150,7 @@
                     </ul>
                 </div>
                 <div class="footer-services">
-                    <h4>Services</h4>
+                    <h3>Services</h3>
                     <ul>
                         <li>Civil Engineering</li>
                         <li>Building & Construction</li>
@@ -161,16 +161,16 @@
                     </ul>
                 </div>
                 <div class="footer-contact">
-                    <h4>Contact Info</h4>
-                    <p class="clickable" onclick="window.open('tel:0500576663')"><i class="fas fa-phone"></i> 0500576663</p>
-                    <p class="clickable" onclick="window.open('tel:0540632183')"><i class="fas fa-phone"></i> 0540632183</p>
-                    <p class="clickable" onclick="window.open('mailto:oclooamen83@gmail.com?subject=Inquiry from SAM-ReJ Website&body=Hello, I would like to discuss a construction project with you.')"><i class="fas fa-envelope"></i> oclooamen83@gmail.com</p>
-                    <p class="clickable" onclick="window.open('https://maps.google.com/?q=Abokobi+boi+Cambodia+Street')"><i class="fas fa-map-marker-alt"></i> House Number EB36, Abokobi boi Cambodia Street</p>
-                    <p><i class="fas fa-box"></i> P.O. Box 1914 Adenta</p>
+                    <h3>Contact Info</h3>
+                    <a class="footer-contact-link" href="tel:0500576663"><i class="fas fa-phone" aria-hidden="true"></i> 0500576663</a>
+                    <a class="footer-contact-link" href="tel:0540632183"><i class="fas fa-phone" aria-hidden="true"></i> 0540632183</a>
+                    <a class="footer-contact-link" href="mailto:oclooamen83@gmail.com?subject=Inquiry from SAM-ReJ Website&body=Hello, I would like to discuss a construction project with you."><i class="fas fa-envelope" aria-hidden="true"></i> oclooamen83@gmail.com</a>
+                    <a class="footer-contact-link" href="https://maps.google.com/?q=Abokobi+boi+Cambodia+Street" target="_blank" rel="noopener noreferrer"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> House Number EB36, Abokobi boi Cambodia Street</a>
+                    <p><i class="fas fa-box" aria-hidden="true"></i> P.O. Box 1914 Adenta</p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 SAM-ReJ COMPANY LIMITED. All rights reserved. | Designed & Developed by <a href="#" style="color: #1877f2; text-decoration: none;">TrueNort Group</a></p>
+                <p>&copy; 2025 SAM-ReJ COMPANY LIMITED. All rights reserved. | Designed & Developed by <span class="developer-credit">TrueNort Group</span></p>
             </div>
         </div>
     </footer>
